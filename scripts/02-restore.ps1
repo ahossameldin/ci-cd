@@ -1,1 +1,1 @@
-dotnet restore .\TestApi.csproj
+dotnet restore .\TestApi\TestApi.csproj

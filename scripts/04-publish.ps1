@@ -13,7 +13,7 @@ New-Item `
     -Path $releaseDir `
     -Force | Out-Null
 
-dotnet publish .\TestApi.csproj `
+dotnet publish .\TestApi\TestApi.csproj `
     --configuration Release `
     --no-restore `
     --output $releaseDir
