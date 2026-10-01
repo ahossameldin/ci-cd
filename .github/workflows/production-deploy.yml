@@ -42,7 +42,16 @@ jobs:
 
 
       # =========================================================
-      # 4. Restore
+      # 4. Detect live / new ports
+      # =========================================================
+
+      - name: Detect ports
+        shell: powershell
+        run: .\scripts\00-detect-ports.ps1
+
+
+      # =========================================================
+      # 5. Restore
       # =========================================================
 
       - name: Restore
@@ -51,7 +60,7 @@ jobs:
 
 
       # =========================================================
-      # 5. Build
+      # 6. Build
       # =========================================================
 
       - name: Build
@@ -60,7 +69,7 @@ jobs:
 
 
       # =========================================================
-      # 6. Publish versioned release
+      # 7. Publish versioned release
       # =========================================================
 
       - name: Publish Release
@@ -69,7 +78,7 @@ jobs:
 
 
       # =========================================================
-      # 7. Database migration
+      # 8. Database migration
       # =========================================================
 
       - name: Database Migration
@@ -78,43 +87,43 @@ jobs:
 
 
       # =========================================================
-      # 8. Stop anything currently using GREEN port
+      # 9. Prepare new port
       # =========================================================
 
-      - name: Prepare Green Port
+      - name: Prepare New Port
         shell: powershell
         run: .\scripts\06-prepare-green.ps1
 
 
       # =========================================================
-      # 9. Start NEW RELEASE on GREEN
+      # 10. Start NEW RELEASE on new port
       # =========================================================
 
-      - name: Start Green
+      - name: Start New Release
         shell: powershell
         run: .\scripts\07-start-green.ps1
 
 
       # =========================================================
-      # 10. Health check GREEN
+      # 11. Health check new port
       # =========================================================
 
-      - name: Health Check Green
+      - name: Health Check New Port
         shell: powershell
         run: .\scripts\08-health-check-green.ps1
 
 
       # =========================================================
-      # 11. Switch Caddy
+      # 12. Switch Caddy
       # =========================================================
 
-      - name: Switch Caddy to Green
+      - name: Switch Caddy
         shell: powershell
         run: .\scripts\09-switch-caddy.ps1
 
 
       # =========================================================
-      # 12. Verify through Caddy
+      # 13. Verify through Caddy
       # =========================================================
 
       - name: Verify Production
@@ -123,16 +132,16 @@ jobs:
 
 
       # =========================================================
-      # 13. Stop OLD BLUE
+      # 14. Stop old port
       # =========================================================
 
-      - name: Stop Blue
+      - name: Stop Old Port
         shell: powershell
         run: .\scripts\11-stop-blue.ps1
 
 
       # =========================================================
-      # 14. Done
+      # 15. Done
       # =========================================================
 
       - name: Deployment Complete

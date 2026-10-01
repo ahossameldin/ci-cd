@@ -1,4 +1,10 @@
-$port = 5501
+$port = $env:NEW_PORT
+
+if ([string]::IsNullOrWhiteSpace($port)) {
+    throw "NEW_PORT is empty. Did 00-detect-ports.ps1 run?"
+}
+
+Write-Host "Preparing new port: $port"
 
 $connections = Get-NetTCPConnection `
     -LocalPort $port `
@@ -9,7 +15,7 @@ if ($connections) {
 
     foreach ($connection in $connections) {
 
-        Write-Host "Stopping existing Green process:"
+        Write-Host "Stopping existing process on port ${port}:"
         Write-Host $connection.OwningProcess
 
         Stop-Process `
@@ -18,4 +24,7 @@ if ($connections) {
     }
 
     Start-Sleep -Seconds 2
+}
+else {
+    Write-Host "Port $port is free."
 }

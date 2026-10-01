@@ -1,4 +1,10 @@
-$url = "http://127.0.0.1:5501/health"
+$newPort = $env:NEW_PORT
+
+if ([string]::IsNullOrWhiteSpace($newPort)) {
+    throw "NEW_PORT is empty. Did 00-detect-ports.ps1 run?"
+}
+
+$url = "http://127.0.0.1:${newPort}/health"
 
 $healthy = $false
 
@@ -13,7 +19,7 @@ for ($i = 1; $i -le 30; $i++) {
 
         if ($response.StatusCode -eq 200) {
 
-            Write-Host "Green is healthy."
+            Write-Host "Port $newPort is healthy."
 
             $healthy = $true
             break
@@ -22,7 +28,7 @@ for ($i = 1; $i -le 30; $i++) {
     }
     catch {
 
-        Write-Host "Attempt ${i}: API not ready."
+        Write-Host "Attempt ${i}: API on port $newPort not ready."
     }
 
     Start-Sleep -Seconds 2
@@ -30,9 +36,9 @@ for ($i = 1; $i -le 30; $i++) {
 
 if (-not $healthy) {
 
-    Write-Host "Green failed health check."
+    Write-Host "Port $newPort failed health check."
 
-    $stderr = "C:\Deploy\Logs\green-$env:RELEASE_VERSION.stderr.log"
+    $stderr = "C:\Deploy\Logs\port-$newPort-$env:RELEASE_VERSION.stderr.log"
 
     if (Test-Path $stderr) {
         Get-Content $stderr -Tail 100
