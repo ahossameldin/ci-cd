@@ -16,7 +16,7 @@ Write-Host ""
 
 $process = Start-Process `
     -FilePath "dotnet" `
-    -ArgumentList "TestApi.dll --urls http://127.0.0.1:5501" `
+    -ArgumentList "TestApi.dll --urls http://0.0.0.0:5501" `
     -WorkingDirectory $releaseDir `
     -RedirectStandardOutput $stdout `
     -RedirectStandardError $stderr `
