@@ -102,8 +102,8 @@ if ($script:switched -eq 0) {
 $json = $config | ConvertTo-Json -Depth 100
 
 Invoke-RestMethod `
-    -Uri "$caddyAdmin/config/" `
-    -Method Put `
+    -Uri "$caddyAdmin/load" `
+    -Method Post `
     -ContentType "application/json" `
     -Body $json
 
