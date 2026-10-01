@@ -1,4 +1,4 @@
-$version = "${{ github.ref_name }}"
+$version = $env:VERSION
 
 Write-Host "Deploying version: $version"
 
