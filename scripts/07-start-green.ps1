@@ -29,20 +29,19 @@ Write-Host $releaseDir
 Write-Host ""
 
 # NOTE: plain Start-Process children die when the runner's step console is
-# torn down, so launch fully detached via WMI (no console attached at all).
+# torn down, and WMI's default spawn shows a console window, so launch
+# fully detached AND hidden via Win32_Process + Win32_ProcessStartup.
+# ([wmiclass] needs Windows PowerShell 5.1, which is what this step uses.)
 $dotnet = (Get-Command dotnet).Source
 
 $cmd = "cmd.exe /c `"`"$dotnet`" TestApi.dll --urls http://0.0.0.0:$newPort > $stdout 2> $stderr`""
 
 Write-Host "Launch: $cmd"
 
-$result = Invoke-CimMethod `
-    -ClassName Win32_Process `
-    -MethodName Create `
-    -Arguments @{
-        CommandLine      = $cmd
-        CurrentDirectory = $releaseDir
-    }
+$startup = ([wmiclass]'Win32_ProcessStartup').CreateInstance()
+$startup.ShowWindow = 0
+
+$result = ([wmiclass]'Win32_Process').Create($cmd, $releaseDir, $startup)
 
 if ($result.ReturnValue -ne 0) {
     throw "Failed to start API, Win32_Process.Create returned $($result.ReturnValue)."
