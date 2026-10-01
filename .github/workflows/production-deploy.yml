@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    env:
-      RELEASE_VERSION: ${{ github.ref_name }}
 
     steps:
 
@@ -41,13 +39,6 @@ jobs:
         env:
           VERSION: ${{ github.ref_name }}
         run: .\scripts\01-set-version.ps1
-
-      - name: Set release version
-        shell: powershell
-        run: |
-          $version = $env:VERSION
-          Write-Host "Deploying version: $version"
-          "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
 
 
       # =========================================================
