@@ -32,7 +32,7 @@ if (-not $healthy) {
 
     Write-Host "Green failed health check."
 
-    $stderr = "C:\Deploy\Logs\green-$env:VERSION.stderr.log"
+    $stderr = "C:\Deploy\Logs\green-$env:RELEASE_VERSION.stderr.log"
 
     if (Test-Path $stderr) {
         Get-Content $stderr -Tail 100

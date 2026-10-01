@@ -1,11 +1,11 @@
-$releaseDir = "C:App\deploy\releases\$env:VERSION"
+$releaseDir = "C:\Deploy\Releases\$env:RELEASE_VERSION"
 
 Write-Host "Publishing to:"
 Write-Host $releaseDir
 
 # Don't overwrite an existing release
 if (Test-Path $releaseDir) {
-    throw "Release $env:VERSION already exists."
+    throw "Release $env:RELEASE_VERSION already exists."
 }
 
 New-Item `

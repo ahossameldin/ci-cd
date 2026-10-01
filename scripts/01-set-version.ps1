@@ -1,5 +1,5 @@
-$version = $env:VERSION
+$version = $env:VERSION -replace '^v', ''
 
 Write-Host "Deploying version: $version"
 
-"VERSION=$version" >> $env:GITHUB_ENV
+"RELEASE_VERSION=$version" >> $env:GITHUB_ENV

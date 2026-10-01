@@ -1,4 +1,4 @@
-$releaseDir = "C:\Deploy\Releases\$env:VERSION"
+$releaseDir = "C:\Deploy\Releases\$env:RELEASE_VERSION"
 
 Write-Host "Running database migration..."
 

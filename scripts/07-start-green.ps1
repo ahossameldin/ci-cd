@@ -1,4 +1,4 @@
-$releaseDir = "C:\Deploy\Releases\$env:VERSION"
+$releaseDir = "C:\Deploy\Releases\$env:RELEASE_VERSION"
 
 $logDir = "C:\Deploy\Logs"
 
@@ -7,8 +7,8 @@ New-Item `
     -Path $logDir `
     -Force | Out-Null
 
-$stdout = "$logDir\green-$env:VERSION.stdout.log"
-$stderr = "$logDir\green-$env:VERSION.stderr.log"
+$stdout = "$logDir\green-$env:RELEASE_VERSION.stdout.log"
+$stderr = "$logDir\green-$env:RELEASE_VERSION.stderr.log"
 
 Write-Host "Starting:"
 Write-Host $releaseDir
