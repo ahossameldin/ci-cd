@@ -28,7 +28,7 @@ for ($i = 1; $i -le 30; $i++) {
     }
     catch {
 
-        Write-Host "Attempt ${i}: API on port $newPort not ready."
+        Write-Host "Attempt ${i}: $($_.Exception.Message)"
     }
 
     Start-Sleep -Seconds 2
