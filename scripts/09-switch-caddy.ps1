@@ -53,6 +53,31 @@ function Replace-Upstream {
         }
     }
 
+    elseif ($Node -is [System.Management.Automation.PSCustomObject]) {
+
+        foreach ($prop in $Node.PSObject.Properties) {
+
+            if ($prop.Name -eq "upstreams") {
+
+                foreach ($upstream in $prop.Value) {
+
+                    if ($upstream.dial -match ":$oldPort$") {
+
+                        Write-Host "Switching dial $($upstream.dial) -> port $newPort"
+
+                        $upstream.dial = ($upstream.dial -replace ":\d+$", ":$newPort")
+                        $script:switched++
+                    }
+                    elseif ($upstream.dial -match ":$newPort$") {
+                        $script:alreadyOnNew = $true
+                    }
+                }
+            }
+
+            Replace-Upstream $prop.Value
+        }
+    }
+
     elseif (
         $Node -is [System.Collections.IEnumerable] -and
         $Node -isnot [string]

@@ -32,6 +32,27 @@ function Find-LivePort {
             }
         }
     }
+    elseif ($Node -is [System.Management.Automation.PSCustomObject]) {
+        foreach ($prop in $Node.PSObject.Properties) {
+            if ($prop.Name -eq "upstreams") {
+                foreach ($upstream in $prop.Value) {
+                    $dial = $upstream.dial
+                    if ($dial -match ":5500$") {
+                        $script:livePort = 5500
+                        return
+                    }
+                    if ($dial -match ":5501$") {
+                        $script:livePort = 5501
+                        return
+                    }
+                }
+            }
+            Find-LivePort $prop.Value
+            if ($script:livePort) {
+                return
+            }
+        }
+    }
     elseif ($Node -is [System.Collections.IEnumerable] -and $Node -isnot [string]) {
         foreach ($item in $Node) {
             Find-LivePort $item
