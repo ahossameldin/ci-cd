@@ -1,4 +1,4 @@
-$version = "${{ gitea.ref_name }}"
+$version = "${{ github.ref_name }}"
 
 Write-Host "Deploying version: $version"
 
