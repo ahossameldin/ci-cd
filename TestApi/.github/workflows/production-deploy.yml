@@ -1,0 +1,127 @@
+name: Production Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: windows
+
+    steps:
+
+      # =========================================================
+      # 1. Checkout the tagged source
+      # =========================================================
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+
+      # =========================================================
+      # 2. Get version from tag
+      # =========================================================
+
+      - name: Set version
+        shell: powershell
+        run: .\scripts\01-set-version.ps1
+
+
+      # =========================================================
+      # 3. Restore
+      # =========================================================
+
+      - name: Restore
+        shell: powershell
+        run: .\scripts\02-restore.ps1
+
+
+      # =========================================================
+      # 4. Build
+      # =========================================================
+
+      - name: Build
+        shell: powershell
+        run: .\scripts\03-build.ps1
+
+
+      # =========================================================
+      # 5. Publish versioned release
+      # =========================================================
+
+      - name: Publish Release
+        shell: powershell
+        run: .\scripts\04-publish.ps1
+
+
+      # =========================================================
+      # 6. Database migration
+      # =========================================================
+
+      - name: Database Migration
+        shell: powershell
+        run: .\scripts\05-database-migration.ps1
+
+
+      # =========================================================
+      # 7. Stop anything currently using GREEN port
+      # =========================================================
+
+      - name: Prepare Green Port
+        shell: powershell
+        run: .\scripts\06-prepare-green.ps1
+
+
+      # =========================================================
+      # 8. Start NEW RELEASE on GREEN
+      # =========================================================
+
+      - name: Start Green
+        shell: powershell
+        run: .\scripts\07-start-green.ps1
+
+
+      # =========================================================
+      # 9. Health check GREEN
+      # =========================================================
+
+      - name: Health Check Green
+        shell: powershell
+        run: .\scripts\08-health-check-green.ps1
+
+
+      # =========================================================
+      # 10. Switch Caddy
+      # =========================================================
+
+      - name: Switch Caddy to Green
+        shell: powershell
+        run: .\scripts\09-switch-caddy.ps1
+
+
+      # =========================================================
+      # 11. Verify through Caddy
+      # =========================================================
+
+      - name: Verify Production
+        shell: powershell
+        run: .\scripts\10-verify-production.ps1
+
+
+      # =========================================================
+      # 12. Stop OLD BLUE
+      # =========================================================
+
+      - name: Stop Blue
+        shell: powershell
+        run: .\scripts\11-stop-blue.ps1
+
+
+      # =========================================================
+      # 13. Done
+      # =========================================================
+
+      - name: Deployment Complete
+        shell: powershell
+        run: .\scripts\12-deployment-complete.ps1
