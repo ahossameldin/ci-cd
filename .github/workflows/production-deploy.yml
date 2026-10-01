@@ -35,7 +35,7 @@ jobs:
       # =========================================================
 
       - name: Set version
-        shell: pwsh
+        shell: powershell
         env:
           VERSION: ${{ github.ref_name }}
         run: .\scripts\01-set-version.ps1
