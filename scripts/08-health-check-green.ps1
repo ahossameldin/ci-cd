@@ -22,7 +22,7 @@ for ($i = 1; $i -le 30; $i++) {
     }
     catch {
 
-        Write-Host "Attempt $i: API not ready."
+        Write-Host "Attempt ${i}: API not ready."
     }
 
     Start-Sleep -Seconds 2
